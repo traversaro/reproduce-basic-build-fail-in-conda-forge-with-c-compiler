@@ -4,13 +4,20 @@ channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [dependencies]
+c-compiler = "==2.0.0"
 cmake = "*"
 
 [feature.gcc.dependencies]
-c-compiler = "==2.0.0"
+gcc = "*"
+
+[feature.gcc.activation.env]
+CC = "gcc"
 
 [feature.clang.dependencies]
-clang_linux-64 = "21.1.*"
+clang = "21.1.*"
+
+[feature.clang.activation.env]
+CC = "clang"
 
 [environments]
 default = ["gcc"]

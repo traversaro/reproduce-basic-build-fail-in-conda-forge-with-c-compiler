@@ -2,15 +2,16 @@
 
 Reproducer for [conda-forge/compilers-feedstock#84](https://github.com/conda-forge/compilers-feedstock/issues/84):
 binutils tools are not exported by the compiler activation scripts in version
-2.0.0. The Pixi environment has only two direct dependencies: `c-compiler` and
-`cmake`. In particular, it does not explicitly install `binutils`, set `AR`, or
+2.0.0. Both Pixi environments depend on `c-compiler` and `cmake`, with the plain
+`gcc` or `clang` package added to select the compiler. Neither explicitly
+installs `binutils`, sets `AR`, or
 override CMake's tool discovery.
 
-The default environment tests GCC via `c-compiler==2.0.0`. A separate `clang`
-environment tests conda-forge's `clang_linux-64` 21.1 compiler activation package
-with `cmake`, without also installing `c-compiler`. Neither environment directly
-depends on binutils, but `clang_linux-64` brings in `binutils_linux-64`
-transitively, so its tool discovery may behave differently.
+The default environment adds `gcc` and sets `CC=gcc`. The separate `clang`
+environment adds `clang` 21.1 and sets `CC=clang`. Both retain
+`c-compiler==2.0.0`; neither adds explicit compiler activation outputs such as
+`gcc_linux-64` or `clang_linux-64`. Setting `CC` selects the compiler for CMake
+without overriding archiver, ranlib, or linker discovery.
 
 The C-only CMake project builds three independent targets from the same small
 function:
