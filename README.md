@@ -6,6 +6,12 @@ binutils tools are not exported by the compiler activation scripts in version
 `cmake`. In particular, it does not explicitly install `binutils`, set `AR`, or
 override CMake's tool discovery.
 
+The default environment tests GCC via `c-compiler==2.0.0`. A separate `clang`
+environment tests conda-forge's `clang_linux-64` 21.1 compiler activation package
+with `cmake`, without also installing `c-compiler`. Neither environment directly
+depends on binutils, but `clang_linux-64` brings in `binutils_linux-64`
+transitively, so its tool discovery may behave differently.
+
 The C-only CMake project builds three independent targets from the same small
 function:
 
@@ -19,6 +25,7 @@ Install [Pixi](https://pixi.sh) and `make`, then run:
 
 ```sh
 pixi run test
+pixi run --environment clang test
 ```
 
 This attempts all three targets, reports each failure, and exits nonzero if any
@@ -32,6 +39,7 @@ A host with system binutils may mask the problem. To reproduce without them:
 ```sh
 docker build -t c-compiler-reproducer .
 docker run --rm c-compiler-reproducer
+docker run --rm c-compiler-reproducer --environment clang test
 ```
 
 The Docker image uses Debian bookworm-slim with only CA certificates and `make`
@@ -43,7 +51,8 @@ are absent before entering the Pixi environment.
 ## GitHub Actions
 
 The workflow builds the Docker image and runs shared, static, and executable
-tests in separate matrix jobs with fail-fast disabled. Tests are not marked as
+tests for both environments in six separate matrix jobs with fail-fast disabled.
+The `default` environment is GCC and `clang` is Clang. Tests are not marked as
 expected failures: a missing tool should fail CI, while successful builds show
 which targets work without system binutils. Logs include compiler activation
 variables, tool discovery, and CMake's selected compiler, archiver, ranlib, and

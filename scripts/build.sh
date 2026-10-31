@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 
 printf 'CONDA_PREFIX=%s\nCC=%s\nAR=%s\nRANLIB=%s\nLD=%s\n' \
     "${CONDA_PREFIX-}" "${CC-}" "${AR-}" "${RANLIB-}" "${LD-}"
-for tool in cc gcc ar ranlib ld make cmake; do
+for tool in cc gcc clang ar ranlib ld make cmake; do
     if path=$(command -v "$tool"); then
         printf '%s: %s\n' "$tool" "$path"
     else

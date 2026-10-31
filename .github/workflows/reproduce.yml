@@ -14,10 +14,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        environment: [default, clang]
         target: [shared, static, executable]
     steps:
       - uses: actions/checkout@v4
       - name: Build minimal Docker image
         run: docker build --tag c-compiler-reproducer .
-      - name: Build and test ${{ matrix.target }} without system binutils
-        run: docker run --rm c-compiler-reproducer "${{ matrix.target }}"
+      - name: Build and test ${{ matrix.target }} (${{ matrix.environment }}) without system binutils
+        run: docker run --rm c-compiler-reproducer --environment "${{ matrix.environment }}" "${{ matrix.target }}"
