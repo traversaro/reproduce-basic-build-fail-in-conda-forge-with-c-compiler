@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [default, clang]
+        environment: [c-compiler, gcc, clang]
         target: [shared, static, executable]
     steps:
       - uses: actions/checkout@v4

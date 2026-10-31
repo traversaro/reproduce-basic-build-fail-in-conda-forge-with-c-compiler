@@ -9,4 +9,4 @@ WORKDIR /reproducer
 COPY . .
 RUN pixi install --locked --all
 ENTRYPOINT ["sh", "scripts/container-test.sh"]
-CMD ["test"]
+CMD ["--environment", "c-compiler", "test"]
