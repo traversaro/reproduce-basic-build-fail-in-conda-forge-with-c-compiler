@@ -14,7 +14,7 @@ gcc = "*"
 CC = "gcc"
 
 [feature.clang.dependencies]
-clang = "21.1.*"
+clang = "*"
 
 [feature.clang.activation.env]
 CC = "clang"

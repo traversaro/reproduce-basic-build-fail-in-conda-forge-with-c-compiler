@@ -8,7 +8,7 @@ installs `binutils`, sets `AR`, or
 override CMake's tool discovery.
 
 The default environment adds `gcc` and sets `CC=gcc`. The separate `clang`
-environment adds `clang` 21.1 and sets `CC=clang`. Both retain
+environment adds `clang` and sets `CC=clang`. Both retain
 `c-compiler==2.0.0`; neither adds explicit compiler activation outputs such as
 `gcc_linux-64` or `clang_linux-64`. Setting `CC` selects the compiler for CMake
 without overriding archiver, ranlib, or linker discovery.
