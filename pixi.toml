@@ -1,0 +1,14 @@
+[workspace]
+name = "c-compiler-reproducer"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[dependencies]
+c-compiler = "==2.0.0"
+cmake = "*"
+
+[tasks]
+test = "sh scripts/build.sh"
+shared = "sh scripts/build.sh shared"
+static = "sh scripts/build.sh static"
+executable = "sh scripts/build.sh executable"

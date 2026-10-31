@@ -1,0 +1,23 @@
+name: Reproduce without system binutils
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [shared, static, executable]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build minimal Docker image
+        run: docker build --tag c-compiler-reproducer .
+      - name: Build and test ${{ matrix.target }} without system binutils
+        run: docker run --rm c-compiler-reproducer "${{ matrix.target }}"
