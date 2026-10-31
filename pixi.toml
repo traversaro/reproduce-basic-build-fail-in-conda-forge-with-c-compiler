@@ -4,8 +4,21 @@ channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [dependencies]
-c-compiler = "==2.0.0"
 cmake = "*"
+
+[feature.c-compiler.dependencies]
+c-compiler = "==2.0.0"
+
+[feature.gcc.dependencies]
+gcc = "*"
+
+[feature.clang.dependencies]
+clang = "*"
+
+[environments]
+c-compiler = ["c-compiler"]
+gcc = ["gcc"]
+clang = ["clang"]
 
 [tasks]
 test = "sh scripts/build.sh"

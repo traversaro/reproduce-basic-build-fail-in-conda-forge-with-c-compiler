@@ -7,6 +7,6 @@ RUN apt-get update \
 COPY --from=pixi /usr/local/bin/pixi /usr/local/bin/pixi
 WORKDIR /reproducer
 COPY . .
-RUN pixi install --locked
+RUN pixi install --locked --all
 ENTRYPOINT ["sh", "scripts/container-test.sh"]
-CMD ["test"]
+CMD ["--environment", "c-compiler", "test"]
