@@ -48,3 +48,21 @@ expected failures: a missing tool should fail CI, while successful builds show
 which targets work without system binutils. Logs include compiler activation
 variables, tool discovery, and CMake's selected compiler, archiver, ranlib, and
 linker. The committed Pixi lockfile pins the tested packages.
+
+### Observed results
+
+The [initial GitHub Actions run](https://github.com/traversaro/reproduce-basic-build-fail-in-conda-forge-with-c-compiler/actions/runs/41208392929)
+with the committed environment (`c-compiler` 2.0.0, GCC 15.3.0, CMake 4.4.5)
+confirmed that system binutils were absent in every job:
+
+| Target | Result |
+| --- | --- |
+| Shared library | Built successfully |
+| Static library | Failed when invoking `CMAKE_AR-NOTFOUND` |
+| Executable | Built and ran successfully |
+
+CMake reported `CMAKE_AR=CMAKE_AR-NOTFOUND`, `CMAKE_RANLIB=:`, and
+`CMAKE_LINKER=CMAKE_LINKER-NOTFOUND`. The compiler driver can still link shared
+libraries and executables using its bundled tools, but static-library creation
+needs an archiver discoverable by CMake. The static job intentionally remains
+red to expose this failure.
