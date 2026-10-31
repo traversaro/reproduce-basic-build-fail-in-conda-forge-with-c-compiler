@@ -84,3 +84,17 @@ CMake reported `CMAKE_AR=CMAKE_AR-NOTFOUND`, `CMAKE_RANLIB=:`, and
 libraries and executables using its bundled tools, but static-library creation
 needs an archiver discoverable by CMake. The static job intentionally remains
 red to expose this failure.
+
+The [three-environment GitHub Actions run](https://github.com/traversaro/reproduce-basic-build-fail-in-conda-forge-with-c-compiler/actions/runs/41209758766)
+tested the expanded matrix without setting `CC` or other tool variables:
+
+| Environment | Shared library | Static library | Executable |
+| --- | --- | --- | --- |
+| `c-compiler` (GCC 15.3.0) | Passed | Failed: `CMAKE_AR-NOTFOUND` | Built and ran |
+| `gcc` (GCC 16.2.0) | Passed | Failed: `CMAKE_AR-NOTFOUND` | Built and ran |
+| `clang` (Clang 23.1.4) | Passed | Passed | Built and ran |
+
+All nine jobs confirmed system binutils were absent. CMake discovered `cc` in
+the `c-compiler` and `gcc` environments and `clang` in the `clang` environment.
+For Clang it also found the environment's unprefixed `ar`, allowing the static
+library to build.
